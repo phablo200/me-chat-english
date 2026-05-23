@@ -3,6 +3,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from _core.mongodb import validate_mongodb_connection
+from history.router import router as history_router
 
 app = FastAPI(title="MeEnglishChat")
 logging.basicConfig(
@@ -27,6 +28,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(history_router)
 
 
 @app.on_event("startup")
