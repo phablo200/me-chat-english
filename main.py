@@ -2,6 +2,7 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from _core.mongodb import validate_mongodb_connection
 
 app = FastAPI(title="MeEnglishChat")
 logging.basicConfig(
@@ -26,6 +27,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+async def startup_check_mongodb() -> None:
+    await validate_mongodb_connection()
+
 
 @app.get("/")
 def root() -> dict[str, str]:
